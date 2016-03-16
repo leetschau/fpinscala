@@ -167,15 +167,26 @@ object PolymorphicFunctions {
   // Note that `=>` associates to the right, so we could
   // write the return type as `A => B => C`
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ???
+    a => (b => f(a, b))
+
+  // Test:
+  // while `val add3 = add(3)` is illegal (it's legal in Haskell),
+  // you can "curry" add like this:
+  def add(x:Int, y:Int) = x + y
+  val add_curry = curry(add)
+  val add3 = add_curry(3)
+  add3(5)
 
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 4: Implement `uncurry`
   def uncurry[A,B,C](f: A => B => C): (A, B) => C =
-    ???
+    (a, b) => f(a)(b)
 
-  /*
+  // Test:
+  val add_uncurry = uncurry(add_curry)
+  add_uncurry(3, 5)
+
   NB: There is a method on the `Function` object in the standard library,
   `Function.uncurried` that you can use for uncurrying.
 
