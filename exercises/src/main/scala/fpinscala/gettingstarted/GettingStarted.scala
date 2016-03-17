@@ -199,5 +199,10 @@ object PolymorphicFunctions {
   // Exercise 5: Implement `compose`
 
   def compose[A,B,C](f: B => C, g: A => B): A => C =
-    ???
+    a => f(g(a))
+
+  // Test
+  val f = (x: Double) => math.Pi / 2 - x
+  val cos = compose(math.sin, f)
+  cos(math.Pi/2)
 }
