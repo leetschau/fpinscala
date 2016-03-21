@@ -62,6 +62,13 @@ object List { // `List` companion object. Contains functions for creating and wo
   def product2(ns: List[Double]) =
     foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
 
+  // Exercise 3.7
+  def product3(ns: List[Double]) =
+    foldRight(ns, 1.0)((x,y) => if (x==0) 0 else (x*y))
+
+  // Exercise 3.8
+  // scala> List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_))
+  // res6: fpinscala.datastructures.List[Int] = Cons(1,Cons(2,Cons(3,Nil)))
 
   def tail[A](l: List[A]): List[A] =
     l match {
@@ -100,10 +107,23 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(x, xs) => Cons(x, init(xs))
     }
 
+  // Exercise 3.9
   def length[A](l: List[A]): Int =
     foldRight(l, 0)((x,y) => 1 + y)
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
+  // Exercise 3.10
+  @annotation.tailrec
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = l match {
+    case Nil => z
+    case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
+  }
+
+  // Exercise 3.11
+  def sum3(ns: List[Int]) = foldLeft(ns, 0)(_+_)
+  def product4(ns: List[Double]) = foldLeft(ns, 1.0)(_*_)
+
+  // Exercise 3.12
+  def reverse[A](l: List[A]): List[A] = foldLeft(l, List[A]())((x,y) => Cons(y, x))
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
