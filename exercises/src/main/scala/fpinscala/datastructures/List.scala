@@ -1,5 +1,16 @@
 package fpinscala.datastructures
 
+/**
+ * How to load fpinscala.datastructures.List into REPL?
+ *
+ * $ scala
+ * scala> :paste -raw
+ * < Paste all codes here and use Ctrl-D to quit paste mode >
+ * scala> import fpinscala.datastructures._
+ * scala> List
+ * scala> List.sum2(List(1,2,3))
+ *
+ */
 sealed trait List[+A] // `List` data type, parameterized on a type, `A`
 case object Nil extends List[Nothing] // A `List` data constructor representing the empty list
 /* Another data constructor, representing nonempty lists. Note that `tail` is another `List[A]`,
@@ -75,7 +86,7 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Nil => Nil
       case Cons(x, xs) => if (f(x)) dropWhile(xs, f) else Cons(x, xs)
     }
-    /* the answer use case guard, which is more concise:
+    /* the official answer use case guard, which is more concise:
     l match {
       case Cons(x, xs) if f(x) => dropWhile(xs, f)
       case _ => l
