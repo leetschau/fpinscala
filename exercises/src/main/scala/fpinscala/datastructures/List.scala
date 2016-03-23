@@ -1,15 +1,9 @@
-package fpinscala.datastructures
+//package fpinscala.datastructures
 
 /**
  * How to load fpinscala.datastructures.List into REPL?
  *
- * $ scala
- * scala> :paste -raw
- * < Paste all codes here and use Ctrl-D to quit paste mode >
- * scala> import fpinscala.datastructures._
- * scala> List
- * scala> List.sum2(List(1,2,3))
- *
+ * See note "Scala Development on Linux"
  */
 sealed trait List[+A] // `List` data type, parameterized on a type, `A`
 case object Nil extends List[Nothing] // A `List` data constructor representing the empty list
@@ -34,6 +28,7 @@ object List { // `List` companion object. Contains functions for creating and wo
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
+  // Exercise 3.1
   val x = List(1,2,3,4,5) match {
     case Cons(x, Cons(2, Cons(4, _))) => x
     case Nil => 42
@@ -41,7 +36,6 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(h, t) => h + sum(t)
     case _ => 101
   }
-
   // answer: 3 (the third case, x = 1, y = 2)
 
   def append[A](a1: List[A], a2: List[A]): List[A] =
@@ -130,4 +124,9 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(a1, a2)(Cons(_,_))
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+
+  def test() = {
+    println(List.append2(List(1,2,3), List(8,2,9)))
+  }
+
 }
