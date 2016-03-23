@@ -187,6 +187,7 @@ object PolymorphicFunctions {
   val add_uncurry = uncurry(add_curry)
   add_uncurry(3, 5)
 
+  /*
   NB: There is a method on the `Function` object in the standard library,
   `Function.uncurried` that you can use for uncurrying.
 
