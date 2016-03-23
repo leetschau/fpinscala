@@ -123,10 +123,18 @@ object List { // `List` companion object. Contains functions for creating and wo
   def append2[A](a1: List[A], a2: List[A]): List[A] =
     foldRight(a1, a2)(Cons(_,_))
 
+  // Exercise 3.15
+  def concat[A](l: List[List[A]]): List[A] =
+    foldRight(l, Nil: List[A])(append)
+
+  def concat2[A](l: List[List[A]]): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => foldLeft(xs, x)((x,y) => append2(x, y))
+  }
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 
   def test() = {
-    println(List.append2(List(1,2,3), List(8,2,9)))
+    println(List.concat(List(List(1,2,3), List(8,298,9))))
   }
-
 }
