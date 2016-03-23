@@ -125,5 +125,9 @@ object List { // `List` companion object. Contains functions for creating and wo
   // Exercise 3.12
   def reverse[A](l: List[A]): List[A] = foldLeft(l, List[A]())((x,y) => Cons(y, x))
 
+  // Exercise 3.14
+  def append2[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)(Cons(_,_))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
