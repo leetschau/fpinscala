@@ -150,10 +150,64 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(x, xs) => Cons(f(x), map(xs)(f))
   }
 
+  // Exercise 3.19
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => if (f(x)) Cons(x, filter(xs)(f))
+                        else filter(xs)(f)
+  }
+
+  // Exercise 3.20
+  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => append(f(x), flatMap(xs)(f))
+  }
+
+  // Exercise 3.21
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] =
+    flatMap(l)(x => if (f(x)) List(x) else Nil)
+
+  // Exercise 3.22
+  def zipAdd(l1: List[Int], l2: List[Int]): List[Int] = l1 match {
+    case Nil => Nil
+    case Cons(x, xs) => l2 match {
+      case Nil => Nil
+      case Cons(y, ys) => Cons(x + y, zipAdd(xs, ys))
+    }
+  }
+
+  // Exercise 3.23
+  def zipWith[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] =
+    l1 match {
+      case Nil => Nil
+      case Cons(x, xs) => l2 match {
+        case Nil => Nil
+        case Cons(y, ys) => Cons(f(x, y), zipWith(xs, ys)(f))
+      }
+    }
+
+  def zipWith2[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] =
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(x, xs), Cons(y, ys)) => Cons(f(x, y), zipWith(xs, ys)(f))
+    }
+
   def test() = {
-    //println(List.addOne(List(1,2,3)))
-    //println(List.double2Str(List(1.0,2.73,3.23)))
-    println(List.map(List(1.0,2.73,3.23))(_.toString()))
-    println(List.map(List(1.0,2.73,3.23))(_ * 2))
+    assert(List.addOne(List(1, 2, 3)) == List(2, 3, 4))
+    assert(List.double2Str(List(1.0, 2.73, 3.23)) ==
+            List("1.0", "2.73", "3.23"))
+    assert(List.map(List(1.0,2.73,3.23))(_.toString()) ==
+            List("1.0", "2.73", "3.23"))
+    assert(List.map(List(1.0,2.73,3.23))(_ * 2) == List(2.0, 5.46, 6.46))
+    assert(List.filter(List(1.0, 2.73, 3.23))(_ > 2) == List(2.73, 3.23))
+    assert(List.flatMap(List(1, 2, 3))(i => List(i, i)) ==
+            List(1, 1, 2, 2, 3, 3))
+    assert(List.filter2(List(1.0, 2.73, 3.23))(_ > 2) == List(2.73, 3.23))
+    assert(List.zipAdd(List(1, 2, 3), List(10, 20, 30)) == List(11, 22, 33))
+    assert(List.zipWith(List(1, 2, 3), List(1.5, 2.2, 3.3))((x, y) => x + y * 2)
+      == List(4.0, 6.4, 9.6))
+    assert(List.zipWith2(List(1, 2, 3), List(1.5, 2.2, 3.3))((x, y) => x + y * 2)
+      == List(4.0, 6.4, 9.6))
   }
 }
