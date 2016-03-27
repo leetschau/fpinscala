@@ -132,9 +132,28 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(x, xs) => foldLeft(xs, x)((x,y) => append2(x, y))
   }
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+  // Exercise 3.16
+  def addOne(l: List[Int]): List[Int] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => Cons(x + 1, addOne(xs))
+  }
+
+  // Exercise 3.17
+  def double2Str(l: List[Double]): List[String] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => Cons(x.toString(), double2Str(xs))
+  }
+
+  // Exercise 3.18
+  def map[A,B](l: List[A])(f: A => B): List[B] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => Cons(f(x), map(xs)(f))
+  }
 
   def test() = {
-    println(List.concat(List(List(1,2,3), List(8,298,9))))
+    //println(List.addOne(List(1,2,3)))
+    //println(List.double2Str(List(1.0,2.73,3.23)))
+    println(List.map(List(1.0,2.73,3.23))(_.toString()))
+    println(List.map(List(1.0,2.73,3.23))(_ * 2))
   }
 }
