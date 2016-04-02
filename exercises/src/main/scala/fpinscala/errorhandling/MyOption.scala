@@ -1,21 +1,35 @@
-sealed trait MyOption[+A] {
-  def mymap[B](f: A => B): MyOption[B] = this match {
-    case MyNone => MyNone
-    case MySome(a) => MySome(f(a))
+sealed trait Option[+A] {
+  def map[B](f: A => B): Option[B] = this match {
+    case None => None
+    case Some(a) => Some(f(a))
+  }
+  def getOrElse[B>:A](default: => B): B = this match {
+    case None => default
+    case Some(a) => a
+  }
+  def flatMap[B](f: A => Option[B]): Option[B] =
+    map(f).getOrElse(None)
+
+  def orElse[B>:A](ob: => Option[B]): Option[B] =
+    this.map(x => Some(x)).getOrElse(ob)
+
+  def filter(f: A => Boolean): Option[A] = this match {
+    case None => None
+    case Some(a) => if (f(a)) Some(a)
+                    else None
   }
 }
 
-case class MySome[+A](get: A) extends MyOption[A]
-case object MyNone extends MyOption[Nothing]
-
-object MyOption {
-  //def mymap[B](f: A => B): MyOption[B] = this match {
-    //case MyNone => MyNone
-    //case MySome(a) => MySome(f(a))
-  //}
-}
-
+case class Some[+A](get: A) extends Option[A]
+case object None extends Option[Nothing]
 
 object Main extends App{
-  println(MySome(3).mymap(_ * 2))
+  assert(Some(3).map(_ * 2) == Some(6))
+  assert(Some(3).getOrElse(4) == 3)
+  assert(None.getOrElse(5) == 5)
+  assert(Some(8).filter(_ > 5) == Some(8))
+  assert(Some(7).flatMap(x => if (x > 23) Some(x + 5) else None) == None)
+  assert(Some(37).flatMap(x => if (x > 23) Some(x + 5) else None) == Some(42))
+  assert(Some(37).orElse(Some(74)) == Some(37))
+  assert(None.orElse(Some(74)) == Some(74))
 }
