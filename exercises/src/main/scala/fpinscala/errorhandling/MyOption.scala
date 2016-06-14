@@ -18,6 +18,15 @@ sealed trait Option[+A] {
     case Some(a) => if (f(a)) Some(a)
                     else None
   }
+
+  def mean(xs: Seq[Double]): Option[Double] = 
+    if (xs.isEmpty) None
+    else Some(xs.sum / xs.length)
+
+  def variance(xs: Seq[Double]): Option[Double] =
+    mean(xs) flatMap (m => mean(xs.map(math.pow(_ - m, 2))))
+    //if (xs.isEmpty) None
+    //else Some(xs.map(math.pow(_ - xs.mean(), 2)) / xs.length)
 }
 
 case class Some[+A](get: A) extends Option[A]
